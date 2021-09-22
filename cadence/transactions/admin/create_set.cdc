@@ -1,4 +1,4 @@
-import KOTD from "../../contracts/KOTD.cdc"
+import Crave from "../../contracts/Crave.cdc"
 
 // This transaction is for the admin to create a new set resource
 // and store it in the top shot smart contract
@@ -10,15 +10,15 @@ import KOTD from "../../contracts/KOTD.cdc"
 transaction(setName: String, setIdentityURL: String?, description: String?) {
     
     // Local variable for the Admin object
-    let adminRef: &KOTD.Admin
+    let adminRef: &Crave.Admin
     let currSetID: UInt32
 
     prepare(acct: AuthAccount) {
 
         // borrow a reference to the Admin resource in storage
-        self.adminRef = acct.borrow<&KOTD.Admin>(from: KOTD.AdminStoragePath)
+        self.adminRef = acct.borrow<&Crave.Admin>(from: Crave.AdminStoragePath)
             ?? panic("Could not borrow a reference to the Admin resource")
-        self.currSetID = KOTD.nextSetID;
+        self.currSetID = Crave.nextSetID;
     }
 
     execute {
@@ -28,7 +28,7 @@ transaction(setName: String, setIdentityURL: String?, description: String?) {
     }
 
     post {
-        KOTD.SetData(setID: self.currSetID).name == setName:
+        Crave.SetData(setID: self.currSetID).name == setName:
           "Could not find the specified set"
     }
 }

@@ -1,7 +1,7 @@
-import KOTD from "../contracts/KOTD.cdc"
+import Crave from "../contracts/Crave.cdc"
 
 // This script returns the full metadata associated with a Collectible Item
-// in the KOTD smart contract
+// in the Crave smart contract
 
 // Parameters:
 //
@@ -13,7 +13,7 @@ import KOTD from "../contracts/KOTD.cdc"
 
 pub fun main(collectibleItemID: UInt32): [String] {
 
-    let featuredArtists = KOTD.getCollectibleItemFeaturedArtists(collectibleItemID: collectibleItemID) ?? panic("Play doesn't exist")
+    let featuredArtists = Crave.getCollectibleItemFeaturedArtists(collectibleItemID: collectibleItemID) ?? panic("Play doesn't exist")
 
     log(featuredArtists)
 

@@ -1,8 +1,8 @@
-import KOTD from "../contracts/KOTD.cdc"
+import Crave from "../contracts/Crave.cdc"
 
 pub fun main(address: Address): Bool {
 
     return getAccount(address)
-        .getCapability<&{KOTD.NiftoryCollectibleCollectionPublic}>(KOTD.CollectionPublicPath)
+        .getCapability<&{Crave.CraveCollectionPublic}>(Crave.CollectionPublicPath)
         .check()
 }

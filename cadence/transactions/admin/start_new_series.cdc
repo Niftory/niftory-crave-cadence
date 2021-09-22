@@ -1,20 +1,20 @@
-import KOTD from "../../contracts/KOTD.cdc"
+import Crave from "../../contracts/Crave.cdc"
 
-// This transaction is for an Admin to start a new KOTD series
+// This transaction is for an Admin to start a new Crave series
 
 transaction (name: String?, identityURL: String?) {
 
-    // Local variable for the KOTD Admin object
-    let adminRef: &KOTD.Admin
+    // Local variable for the Crave Admin object
+    let adminRef: &Crave.Admin
     let currentSeriesID: UInt32
 
     prepare(acct: AuthAccount) {
 
         // borrow a reference to the Admin resource in storage
-        self.adminRef = acct.borrow<&KOTD.Admin>(from: KOTD.AdminStoragePath)
+        self.adminRef = acct.borrow<&Crave.Admin>(from: Crave.AdminStoragePath)
             ?? panic("No admin resource in storage")
 
-        self.currentSeriesID = KOTD.currentSeriesID
+        self.currentSeriesID = Crave.currentSeriesID
     }
 
     execute {

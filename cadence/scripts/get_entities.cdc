@@ -1,4 +1,4 @@
-import KOTD from "../contracts/KOTD.cdc"
+import Crave from "../contracts/Crave.cdc"
 
 // This is the script to get a list of all the NFTs an account owns
 // Just change the argument to `getAccount` to whatever account you want
@@ -9,14 +9,14 @@ import KOTD from "../contracts/KOTD.cdc"
 //
 // account: The Flow Address of the account whose Collectible data needs to be read
 
-// Returns: [KOTD.NFT]
+// Returns: [Crave.NFT]
 // list of all NFTs an account owns
 
 pub struct CollectibleReturn {
-    pub var data : KOTD.CollectibleData
+    pub var data : Crave.CollectibleData
     pub var id : UInt64
 
-    init(data: KOTD.CollectibleData, id: UInt64) {
+    init(data: Crave.CollectibleData, id: UInt64) {
         self.data = data;
         self.id = id;
     }
@@ -26,8 +26,8 @@ pub fun main(account: Address, collectibleID: UInt32): [CollectibleReturn] {
 
     let acct = getAccount(account)
 
-    let collectionRef = acct.getCapability(KOTD.CollectionPublicPath)
-        .borrow<&{KOTD.NiftoryCollectibleCollectionPublic}>()!
+    let collectionRef = acct.getCapability(Crave.CollectionPublicPath)
+        .borrow<&{Crave.CraveCollectionPublic}>()!
 
     var entities: [CollectibleReturn] = []
 

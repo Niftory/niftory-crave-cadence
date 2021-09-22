@@ -1,27 +1,36 @@
-import KOTD from "../../contracts/KOTD.cdc"
+import Crave from "../../contracts/Crave.cdc"
 
 // This transaction creates a new Collectible Item struct 
-// and stores it in the KOTD smart contract
+// and stores it in the Crave smart contract
 
 // Parameters:
 //
 // metadata: A dictionary of all the Collectible metadata associated
+// name: <name of the NFT>
+// description: <description of the NFT>
+// mediaUrl: <full url of the NFT>
+// mediaType: <image/png, video/mp4... etc>
+// externalLink: <full url of the NFT shown on your website>
 
-transaction(metaDataTitle: String, featuredArtists: [String]) {
+transaction(name: String, description: String, mediaUrl: String, mediaType: String, externalLink: String, featuredArtists: [String]) {
 
-    // Local variable for the KOTD Admin object
-    let adminRef: &KOTD.Admin
+    // Local variable for the Crave Admin object
+    let adminRef: &Crave.Admin
     let currCollectibleItemID: UInt32
     let metadata: {String: String}
 
     prepare(acct: AuthAccount) {
 
         // borrow a reference to the admin resource
-        self.currCollectibleItemID = KOTD.nextCollectibleItemID;
-        self.adminRef = acct.borrow<&KOTD.Admin>(from: KOTD.AdminStoragePath)
+        self.currCollectibleItemID = Crave.nextCollectibleItemID;
+        self.adminRef = acct.borrow<&Crave.Admin>(from: Crave.AdminStoragePath)
             ?? panic("No admin resource in storage")
         self.metadata = {
-            "title": metaDataTitle
+            "name": name,
+            "description": description,
+            "mediaUrl": mediaUrl,
+            "mediaType": mediaType,
+            "externalLink": externalLink
         }
     }
 
@@ -32,7 +41,7 @@ transaction(metaDataTitle: String, featuredArtists: [String]) {
 
     post {
         
-        KOTD.getCollectibleItemMetaData(collectibleItemID: self.currCollectibleItemID) != nil:
+        Crave.getCollectibleItemMetaData(collectibleItemID: self.currCollectibleItemID) != nil:
             "collectibleItemID doesnt exist"
     }
 }

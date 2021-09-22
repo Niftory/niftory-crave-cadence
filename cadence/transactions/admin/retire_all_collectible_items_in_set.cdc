@@ -1,4 +1,4 @@
-import KOTD from "../../contracts/KOTD.cdc"
+import Crave from "../../contracts/Crave.cdc"
 
 // This transaction is for retiring all collectible items from a set, which
 // makes it so that collectibles can no longer be minted
@@ -9,12 +9,12 @@ import KOTD from "../../contracts/KOTD.cdc"
 // setID: the ID of the set to be retired entirely
 
 transaction(setID: UInt32) {
-    let adminRef: &KOTD.Admin
+    let adminRef: &Crave.Admin
 
     prepare(acct: AuthAccount) {
 
         // borrow a reference to the Admin resource in storage
-        self.adminRef = acct.borrow<&KOTD.Admin>(from: KOTD.AdminStoragePath)
+        self.adminRef = acct.borrow<&Crave.Admin>(from: Crave.AdminStoragePath)
             ?? panic("No admin resource in storage")
     }
 

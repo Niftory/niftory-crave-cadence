@@ -40,6 +40,6 @@
 		},
 		"testnet": {
 			"testnet-account": ["KOTD"]
-		  }
+		}
 	}
 }

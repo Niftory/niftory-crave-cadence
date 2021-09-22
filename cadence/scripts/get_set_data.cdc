@@ -1,4 +1,4 @@
-import KOTD from "../contracts/KOTD.cdc"
+import Crave from "../contracts/Crave.cdc"
 
 // This script gets the setName of a set with specified setID
 
@@ -9,7 +9,7 @@ import KOTD from "../contracts/KOTD.cdc"
 // Returns: String
 // Name of set with specified setID
 
-pub fun main(setID: UInt32): KOTD.SetData {
+pub fun main(setID: UInt32): Crave.SetData {
         
-    return KOTD.SetData(setID: setID)
+    return Crave.SetData(setID: setID)
 }

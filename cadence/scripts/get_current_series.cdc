@@ -1,12 +1,12 @@
-import KOTD from "../contracts/KOTD.cdc"
+import Crave from "../contracts/Crave.cdc"
 
-// This script reads the current Series from the KOTD contract and 
+// This script reads the current Series from the Crave contract and 
 // returns that number to the caller
 
-// Returns: KOTD.Series
-// The Current Series struct in the KOTD contract
+// Returns: Crave.Series
+// The Current Series struct in the Crave contract
 
-pub fun main(): KOTD.CurrSeriesData {
-    let currSeries = KOTD.CurrSeriesData()
+pub fun main(): Crave.CurrSeriesData {
+    let currSeries = Crave.CurrSeriesData()
     return currSeries
 }

@@ -14,7 +14,7 @@ The official flow-js-testing library has been used for the creation of the test 
 
 Much thanks to all the Dapper resouces and Discord help used in the adaptation of this contract!
 
-| :exclamation:  This project last tested on Flow CLI v0.21.0 |
+| :exclamation:  This project last tested on Flow CLI v0.28.2 |
 |--------------------------------------------------------------|
 
 ## Running the tests
@@ -45,6 +45,9 @@ Once installed, from the root of the project:
     ```
     
 4. Run the 'test' shell script; this starts the flow emulator, deploys contracts, runs all tests, then cleans up the emulator:
+
+| :exclamation:  The test framework has changed signficantly, and these need to be updated! |
+|--------------------------------------------------------------|
     
     ```
     ./tests.sh
@@ -69,46 +72,4 @@ You're now setup to run any desired commands against testnet.
 ## Common commands
 | :bulb: Contracts are already deployed to testnet at 0x9f3e19cda04154fc - you'll generally only need to run scripts and transactions. |
 |---------------------------------------------------------------------------------------------------------------|
-
-##### Deploy contract 
-    
-    flow project deploy --network=testnet
-
-##### Update deployed contract
-    flow project deploy --network=testnet --update
-
-| :bulb: Only certain changes to a contract can be deployed via --update. |
-|-------------------------------------------------------------------------|
-
-##### Remove deployed contract
-    flow accounts remove-contract KOTD --network=testnet --signer=testnet-account
-
-##### Create Set
-    flow transactions send ./cadence/transactions/admin/create_set.cdc --signer testnet-account --network=testnet --args-json '[{"type": "String","value": "Test Set 001"}]'
-
-##### Get Set Name
-    flow scripts execute ./cadence/scripts/get_set_name.cdc --network=testnet --args-json '[{"type": "UInt32","value": "1"}]'
-
-##### Create Collectible Item (Content)
-    flow transactions send ./cadence/transactions/admin/create_collectible_item.cdc --signer testnet-account --network=testnet --args-json '[{"type": "String","value": "Test Moment 002"}]'
-
-##### Mint a Collectible NFT
-    flow transactions send ./cadence/transactions/admin/mint_collectible.cdc --signer testnet-account --network=testnet --args-json '[{"type": "UInt32","value": "1"}, {"type": "UInt32","value": "1"}, {"type": "Address","value": "0x9f3e19cda04154fc"}]'
-
-##### Add a Collectible Item to a Set
-    flow transactions send ./cadence/transactions/admin/add_collectible_item_to_set.cdc --signer testnet-account --network=testnet --args-json '[{"type": "UInt32","value": "1"}, {"type": "UInt32","value": "2"}]'
-
-##### Batch mint Collectible NFTs
-    flow transactions send ./cadence/transactions/admin/mint_collectibles_bulk.cdc --signer testnet-account --network=testnet --args-json '[{"type": "UInt32","value": "1"}, {"type": "UInt32","value": "2"}, {"type": "UInt64","value": "10"}]'
-
-##### Get Collectible IDs in a Collection
-    flow scripts execute ./cadence/scripts/get_collection_collectible_ids.cdc --network=testnet --args-json '[{"type": "Address","value": "0x9f3e19cda04154fc"}]'
-
-##### Get metadata for a given Collectible Item
-     flow scripts execute ./cadence/scripts/get_collectible_item_metadata.cdc --network=testnet --args-json '[{"type": "UInt32","value": "1"}]'
-
-##### Get Serial Number for a Collectible
-    flow scripts execute ./cadence/scripts/get_collectible_serial_number.cdc --network=testnet --args-json '[{"type": "Address","value": "0x9f3e19cda04154fc"}, {"type": "UInt64","value": "8"}]'
-
-##### Get the Edition Size for an Edition (Set + CollectibleItem)
-    flow scripts execute ./cadence/scripts/get_edition_size.cdc --network=testnet --args-json '[{"type": "UInt32","value": "1"}, {"type": "UInt32","value": "2"}]'
+See `flow-cli-emulator.sh` for `flow-cli-testnet.sh` comman commands.

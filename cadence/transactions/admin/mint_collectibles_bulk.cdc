@@ -1,4 +1,4 @@
-import KOTD from "../../contracts/KOTD.cdc"
+import Crave from "../../contracts/Crave.cdc"
 
 // This transaction mints multiple moments 
 // from a single set/collectible item combination (otherwise known as edition)
@@ -13,12 +13,12 @@ import KOTD from "../../contracts/KOTD.cdc"
 transaction(setID: UInt32, collectibleItemID: UInt32, quantity: UInt64, recipientAddr: Address) {
 
     // Local variable for the topshot Admin object
-    let adminRef: &KOTD.Admin
+    let adminRef: &Crave.Admin
 
     prepare(acct: AuthAccount) {
 
         // borrow a reference to the Admin resource in storage
-        self.adminRef = acct.borrow<&KOTD.Admin>(from: KOTD.AdminStoragePath)!
+        self.adminRef = acct.borrow<&Crave.Admin>(from: Crave.AdminStoragePath)!
     }
 
     execute {
@@ -33,7 +33,7 @@ transaction(setID: UInt32, collectibleItemID: UInt32, quantity: UInt64, recipien
         let recipient = getAccount(recipientAddr)
 
         // get the Collection reference for the receiver
-        let receiverRef = recipient.getCapability(KOTD.CollectionPublicPath).borrow<&{KOTD.NiftoryCollectibleCollectionPublic}>()
+        let receiverRef = recipient.getCapability(Crave.CollectionPublicPath).borrow<&{Crave.CraveCollectionPublic}>()
             ?? panic("Cannot borrow a reference to the recipient's collection")
 
         // deposit the NFT in the receivers collection

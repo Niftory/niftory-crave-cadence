@@ -1,4 +1,4 @@
-import KOTD from "../contracts/KOTD.cdc"
+import Crave from "../contracts/Crave.cdc"
 
 // This script returns the number of specified Collectibles that have been
 // minted for the specified edition
@@ -13,7 +13,7 @@ import KOTD from "../contracts/KOTD.cdc"
 
 pub fun main(setID: UInt32, collectibleItemID: UInt32): UInt32 {
 
-    let editionSize = KOTD.getNumCollectiblesInEdition(setID: setID, collectibleItemID: collectibleItemID)
+    let editionSize = Crave.getNumCollectiblesInEdition(setID: setID, collectibleItemID: collectibleItemID)
         ?? panic("Could not find the specified edition")
 
     return editionSize

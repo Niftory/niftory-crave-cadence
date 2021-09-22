@@ -1,4 +1,4 @@
-import KOTD from "../contracts/KOTD.cdc"
+import Crave from "../contracts/Crave.cdc"
 
 // This script returns an array of the Collectible Item IDs that are
 // in the specified set
@@ -12,7 +12,7 @@ import KOTD from "../contracts/KOTD.cdc"
 
 pub fun main(setID: UInt32): [UInt32] {
 
-    let collectibleItems = KOTD.getCollectibleItemsInSet(setID: setID)!
+    let collectibleItems = Crave.getCollectibleItemsInSet(setID: setID)!
 
     return collectibleItems
 }

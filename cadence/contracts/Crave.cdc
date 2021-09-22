@@ -1,5 +1,5 @@
 /* 
-Central Smart Contract for KOTD x Niftory Battle Rap Collectibles
+Central Smart Contract for Crave x Niftory Food Culture Collectibles
 
 Heavily based off the Dapper Labs NBA Top Shot contract, with the following modifications:
 -Nomenclature changes (e.g. 'Play' -> 'CollectibleItem')
@@ -13,7 +13,7 @@ Much thanks to all the Dapper resouces and Discord help used in the adaptation o
 
 import NonFungibleToken from "./NonFungibleToken.cdc"
 
-pub contract KOTD: NonFungibleToken {
+pub contract Crave: NonFungibleToken {
 
     // -----------------------------------------------------------------------
     // Named Paths
@@ -88,7 +88,7 @@ pub contract KOTD: NonFungibleToken {
     pub var nextSetID: UInt32
     
     // totalSupply
-    // The total number of KOTD Collectibles that have been minted
+    // The total number of Collectibles that have been minted
     pub var totalSupply: UInt64
 
     // -----------------------------------------------------------------------
@@ -122,7 +122,7 @@ pub contract KOTD: NonFungibleToken {
         pub let seriesIdentityURL: String?
 
          init() {
-            var referencedSeries = &KOTD.seriesDatas[KOTD.currentSeriesID] as &Series
+            var referencedSeries = &Crave.seriesDatas[Crave.currentSeriesID] as &Series
             self.seriesID = referencedSeries.seriesID
             self.name = referencedSeries.name
             self.seriesIdentityURL = referencedSeries.seriesIdentityURL
@@ -151,12 +151,12 @@ pub contract KOTD: NonFungibleToken {
             pre {
                 metadata.length != 0: "New CollectibleItem metadata cannot be empty"
             }
-            self.collectibleItemID = KOTD.nextCollectibleItemID
+            self.collectibleItemID = Crave.nextCollectibleItemID
             self.metadata = metadata
             self.featuredArtists = featuredArtists
 
             // Increment the ID so that it isn't used again
-            KOTD.nextCollectibleItemID = KOTD.nextCollectibleItemID + UInt32(1)
+            Crave.nextCollectibleItemID = Crave.nextCollectibleItemID + UInt32(1)
 
             emit CollectibleItemCreated(id: self.collectibleItemID, metadata: metadata)
         }
@@ -191,7 +191,7 @@ pub contract KOTD: NonFungibleToken {
         pub var numberMintedPerCollectibleItem: {UInt32: UInt32}
 
         init(setID: UInt32) {
-            var referencedSet = &KOTD.sets[setID] as &Set
+            var referencedSet = &Crave.sets[setID] as &Set
 
             self.setID = referencedSet.setID
             self.name = referencedSet.name
@@ -274,17 +274,17 @@ pub contract KOTD: NonFungibleToken {
                 name.length > 0: "New Set name cannot be empty"
             }
 
-            self.setID = KOTD.nextSetID
+            self.setID = Crave.nextSetID
             self.name = name
             self.setIdentityURL = setIdentityURL
             self.description = description
-            self.series = KOTD.seriesDatas[KOTD.currentSeriesID]!
+            self.series = Crave.seriesDatas[Crave.currentSeriesID]!
             self.collectibleItems = []
             self.retired = {}
             self.locked = false
             self.numberMintedPerCollectibleItem = {}
 
-            KOTD.nextSetID = KOTD.nextSetID + UInt32(1)
+            Crave.nextSetID = Crave.nextSetID + UInt32(1)
 
             emit SetCreated(setID: self.setID, series: self.series.seriesID)
         }
@@ -300,7 +300,7 @@ pub contract KOTD: NonFungibleToken {
         
         pub fun addCollectibleItem(collectibleItemID: UInt32) {
             pre {
-                KOTD.collectibleItemDatas[collectibleItemID] != nil: "Cannot add the CollectibleItem to Set: CollectibleItem doesn't exist."
+                Crave.collectibleItemDatas[collectibleItemID] != nil: "Cannot add the CollectibleItem to Set: CollectibleItem doesn't exist."
                 !self.locked: "Cannot add the collectibleItem to the Set after the set has been locked."
                 self.numberMintedPerCollectibleItem[collectibleItemID] == nil: "The collectibleItem has already beed added to the set."
             }
@@ -447,7 +447,7 @@ pub contract KOTD: NonFungibleToken {
     pub resource Admin {
 
         // createCollectibleItem creates a new CollectibleItem struct 
-        // and stores it in the CollectibleItems dictionary in the KOTD smart contract
+        // and stores it in the CollectibleItems dictionary in the Crave smart contract
         //
         // Parameters: metadata: A dictionary mapping metadata titles to their data
         //                       example: {"Player Name": "Kevin Durant", "Height": "7 feet"}
@@ -461,13 +461,13 @@ pub contract KOTD: NonFungibleToken {
             let newID = newCollectibleItem.collectibleItemID
 
             // Store it in the contract storage
-            KOTD.collectibleItemDatas[newID] = newCollectibleItem
+            Crave.collectibleItemDatas[newID] = newCollectibleItem
 
             return newID
         }
 
         // createSet creates a new Set resource and stores it
-        // in the sets mapping in the KOTD contract
+        // in the sets mapping in the Crave contract
         //
         // Parameters: name: The name of the Set
         
@@ -476,10 +476,10 @@ pub contract KOTD: NonFungibleToken {
             var newSet <- create Set(name: name, setIdentityURL: setIdentityURL, description: description)
 
             // Store it in the sets mapping field
-            KOTD.sets[newSet.setID] <-! newSet
+            Crave.sets[newSet.setID] <-! newSet
         }
 
-        // borrowSet returns a reference to a set in the KOTD
+        // borrowSet returns a reference to a set in the Crave
         // contract so that the admin can call methods on it
         //
         // Parameters: setID: The ID of the Set that you want to
@@ -490,12 +490,12 @@ pub contract KOTD: NonFungibleToken {
         
         pub fun borrowSet(setID: UInt32): &Set {
             pre {
-                KOTD.sets[setID] != nil: "Cannot borrow Set: The Set doesn't exist"
+                Crave.sets[setID] != nil: "Cannot borrow Set: The Set doesn't exist"
             }
             
             // Get a reference to the Set and return it
             // use `&` to indicate the reference to the object and type
-            return &KOTD.sets[setID] as &Set
+            return &Crave.sets[setID] as &Set
         }
 
         // startNewSeries ends the current series by creating a new Series, 
@@ -507,32 +507,32 @@ pub contract KOTD: NonFungibleToken {
         
         pub fun startNewSeries(name: String?, identityURL: String?): UInt32 {
             // End the current series and start a new one
-            // by incrementing the KOTD series number
-            let setIDs = KOTD.sets.keys 
+            // by incrementing the Crave series number
+            let setIDs = Crave.sets.keys 
 
             var i: Int = 0
             while (i < setIDs.length) {
                 var currSet = SetData(setID: setIDs[i])
-                if (currSet.series.seriesID == KOTD.currentSeriesID) {
+                if (currSet.series.seriesID == Crave.currentSeriesID) {
                     self.borrowSet(setID: setIDs[i]).retireAll()
                     self.borrowSet(setID: setIDs[i]).lock()
                 }
                 i = i + 1;
             }      
 
-            var newSeries = Series(seriesID: KOTD.currentSeriesID + UInt32(1), name: name, seriesIdentityURL: identityURL)
+            var newSeries = Series(seriesID: Crave.currentSeriesID + UInt32(1), name: name, seriesIdentityURL: identityURL)
 
-            KOTD.currentSeriesID = newSeries.seriesID
+            Crave.currentSeriesID = newSeries.seriesID
 
             //put it in storage
-            KOTD.seriesDatas[KOTD.currentSeriesID] = newSeries
+            Crave.seriesDatas[Crave.currentSeriesID] = newSeries
 
             
 
 
-            emit NewSeriesStarted(newCurrentSeries: KOTD.currentSeriesID)
+            emit NewSeriesStarted(newCurrentSeries: Crave.currentSeriesID)
 
-            return KOTD.currentSeriesID
+            return Crave.currentSeriesID
         }
 
         // createNewAdmin creates a new Admin resource
@@ -552,9 +552,9 @@ pub contract KOTD: NonFungibleToken {
 
         init(serialNumber: UInt32, collectibleItemID: UInt32, setID: UInt32) {
             // Increment the global Collectible IDs
-            KOTD.totalSupply = KOTD.totalSupply + UInt64(1)
+            Crave.totalSupply = Crave.totalSupply + UInt64(1)
 
-            self.id = KOTD.totalSupply
+            self.id = Crave.totalSupply
 
             // Set the metadata struct
             self.data = CollectibleData(setID: setID, collectibleItemID: collectibleItemID, serialNumber: serialNumber)
@@ -573,12 +573,12 @@ pub contract KOTD: NonFungibleToken {
     // This is the interface that users can cast their Collectible Collection as
     // to allow others to deposit Collectibles into their Collection. It also allows for reading
     // the IDs of Collectibles in the Collection.
-    pub resource interface NiftoryCollectibleCollectionPublic {
+    pub resource interface CraveCollectionPublic {
         pub fun deposit(token: @NonFungibleToken.NFT)
         pub fun batchDeposit(tokens: @NonFungibleToken.Collection)
         pub fun getIDs(): [UInt64]
         pub fun borrowNFT(id: UInt64): &NonFungibleToken.NFT
-        pub fun borrowCollectible(id: UInt64): &KOTD.NFT? {
+        pub fun borrowCollectible(id: UInt64): &Crave.NFT? {
             // If the result isn't nil, the id of the returned reference
             // should be the same as the argument to the function
             post {
@@ -590,7 +590,7 @@ pub contract KOTD: NonFungibleToken {
 
     // Collection is a resource that every user who owns NFTs 
     // will store in their account to manage their NFTS
-    pub resource Collection: NiftoryCollectibleCollectionPublic, NonFungibleToken.Provider, NonFungibleToken.Receiver, NonFungibleToken.CollectionPublic { 
+    pub resource Collection: CraveCollectionPublic, NonFungibleToken.Provider, NonFungibleToken.Receiver, NonFungibleToken.CollectionPublic { 
         // Dictionary of Collectible conforming tokens
         // NFT is a resource type with a UInt64 ID field
         pub var ownedNFTs: @{UInt64: NonFungibleToken.NFT}
@@ -641,9 +641,9 @@ pub contract KOTD: NonFungibleToken {
         // Paramters: token: the NFT to be deposited in the collection
         pub fun deposit(token: @NonFungibleToken.NFT) {
             
-            // Cast the deposited token as a KOTD NFT to make sure
+            // Cast the deposited token as a Crave NFT to make sure
             // it is the correct type
-            let token <- token as! @KOTD.NFT
+            let token <- token as! @Crave.NFT
 
             // Get the token's ID
             let id = token.id
@@ -690,7 +690,7 @@ pub contract KOTD: NonFungibleToken {
         // Returns: A reference to the NFT
         //
         // Note: This only allows the caller to read the ID of the NFT,
-        // not any KOTD specific data. Please use borrowCollectible to 
+        // not any Crave specific data. Please use borrowCollectible to 
         // read Collectible data.
         pub fun borrowNFT(id: UInt64): &NonFungibleToken.NFT {
             return &self.ownedNFTs[id] as &NonFungibleToken.NFT
@@ -706,10 +706,10 @@ pub contract KOTD: NonFungibleToken {
         // Parameters: id: The ID of the NFT to get the reference for
         //
         // Returns: A reference to the NFT
-        pub fun borrowCollectible(id: UInt64): &KOTD.NFT? {
+        pub fun borrowCollectible(id: UInt64): &Crave.NFT? {
             if self.ownedNFTs[id] != nil {
                 let ref = &self.ownedNFTs[id] as auth &NonFungibleToken.NFT
-                return ref as! &KOTD.NFT
+                return ref as! &Crave.NFT
             } else {
                 return nil
             }
@@ -731,14 +731,14 @@ pub contract KOTD: NonFungibleToken {
     // Once they have a Collection in their storage, they are able to receive
     // Collectibles in transactions.
     pub fun createEmptyCollection(): @NonFungibleToken.Collection {
-        return <-create KOTD.Collection()
+        return <-create Crave.Collection()
     }
 
-    // getAllCollectibleItems returns all the collectibleItems in KOTD
+    // getAllCollectibleItems returns all the collectibleItems in Crave
     //
     // Returns: An array of all the collectibleItems that have been created
-    pub fun getAllCollectibleItems(): [KOTD.CollectibleItem] {
-        return KOTD.collectibleItemDatas.values
+    pub fun getAllCollectibleItems(): [Crave.CollectibleItem] {
+        return Crave.collectibleItemDatas.values
     }
 
     // getCollectibleItemMetaData returns all the metadata associated with a specific CollectibleItem
@@ -770,7 +770,7 @@ pub contract KOTD: NonFungibleToken {
     // Returns: The metadata field as a String Optional
     pub fun getCollectibleItemMetaDataByField(collectibleItemID: UInt32, field: String): String? {
         // Don't force a revert if the collectibleItemID or field is invalid
-        if let collectibleItem = KOTD.collectibleItemDatas[collectibleItemID] {
+        if let collectibleItem = Crave.collectibleItemDatas[collectibleItemID] {
             return collectibleItem.metadata[field]
         } else {
             return nil
@@ -784,7 +784,7 @@ pub contract KOTD: NonFungibleToken {
     // Returns: An array of CollectibleItem IDs
     pub fun getCollectibleItemsInSet(setID: UInt32): [UInt32]? {
         // Don't force a revert if the setID is invalid
-        return KOTD.sets[setID]?.collectibleItems
+        return Crave.sets[setID]?.collectibleItems
     }
 
     // isEditionRetired returns a boolean that indicates if a Set/CollectibleItem combo
@@ -799,13 +799,13 @@ pub contract KOTD: NonFungibleToken {
     pub fun isEditionRetired(setID: UInt32, collectibleItemID: UInt32): Bool? {
         // Don't force a revert if the set or collectibleItem ID is invalid
         // Remove the set from the dictionary to get its field
-        if let setToRead <- KOTD.sets.remove(key: setID) {
+        if let setToRead <- Crave.sets.remove(key: setID) {
 
             // See if the CollectibleItem is retired from this Set
             let retired = setToRead.retired[collectibleItemID]
 
             // Put the Set back in the contract storage
-            KOTD.sets[setID] <-! setToRead
+            Crave.sets[setID] <-! setToRead
 
             // Return the retired status
             return retired
@@ -826,7 +826,7 @@ pub contract KOTD: NonFungibleToken {
     // Returns: Boolean indicating if the Set is locked or not
     pub fun isSetLocked(setID: UInt32): Bool? {
         // Don't force a revert if the setID is invalid
-        return KOTD.sets[setID]?.locked
+        return Crave.sets[setID]?.locked
     }
 
     // getNumCollectiblesInEdition return the number of Collectibles that have been 
@@ -840,13 +840,13 @@ pub contract KOTD: NonFungibleToken {
     pub fun getNumCollectiblesInEdition(setID: UInt32, collectibleItemID: UInt32): UInt32? {
         // Don't force a revert if the Set or collectibleItem ID is invalid
         // Remove the Set from the dictionary to get its field
-        if let setToRead <- KOTD.sets.remove(key: setID) {
+        if let setToRead <- Crave.sets.remove(key: setID) {
 
             // Read the numMintedPerPlay
             let amount = setToRead.numberMintedPerCollectibleItem[collectibleItemID]
 
             // Put the Set back into the Sets dictionary
-            KOTD.sets[setID] <-! setToRead
+            Crave.sets[setID] <-! setToRead
 
             return amount
         } else {
@@ -863,7 +863,7 @@ pub contract KOTD: NonFungibleToken {
         // Initialize contract fields
         self.currentSeriesID = 0
         self.seriesDatas = {}
-        self.seriesDatas[self.currentSeriesID] = (Series(seriesID: KOTD.currentSeriesID, name: nil, seriesIdentityURL: nil))
+        self.seriesDatas[self.currentSeriesID] = (Series(seriesID: Crave.currentSeriesID, name: nil, seriesIdentityURL: nil))
         self.collectibleItemDatas = {}
         self.sets <- {}
         self.nextCollectibleItemID = 1
@@ -872,15 +872,15 @@ pub contract KOTD: NonFungibleToken {
 
         // initialize paths
         // Set our named paths
-        self.CollectionStoragePath = /storage/NiftoryCollectibleCollection001
-        self.CollectionPublicPath = /public/NiftoryCollectibleCollection001
-        self.AdminStoragePath = /storage/KOTDAdmin005
+        self.CollectionStoragePath = /storage/CraveCollection001
+        self.CollectionPublicPath = /public/CraveCollection001
+        self.AdminStoragePath = /storage/CraveAdmin005
 
         // Put a new Collection in storage 
         self.account.save<@Collection>(<- create Collection(), to: self.CollectionStoragePath)
 
         // Create a public capability for the Collection
-        self.account.link<&{NiftoryCollectibleCollectionPublic}>(self.CollectionPublicPath, target: self.CollectionStoragePath)
+        self.account.link<&{CraveCollectionPublic}>(self.CollectionPublicPath, target: self.CollectionStoragePath)
 
         // Put the Minter in storage
         self.account.save<@Admin>(<- create Admin(), to: self.AdminStoragePath)

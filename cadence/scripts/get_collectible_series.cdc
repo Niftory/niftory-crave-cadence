@@ -1,4 +1,4 @@
-import KOTD from "../contracts/KOTD.cdc"
+import Crave from "../contracts/Crave.cdc"
 
 // This script gets the Series associated with a Collectible
 // in a collection by getting a reference to the Collectible
@@ -9,19 +9,19 @@ import KOTD from "../contracts/KOTD.cdc"
 // account: The Flow Address of the account whose Collectible data needs to be read
 // id: The unique ID for the Collectible whose data needs to be read
 
-// Returns: KOTD.Series
+// Returns: Crave.Series
 // The Series associated with a Collectible with a specified ID
 
-pub fun main(account: Address, id: UInt64): KOTD.Series {
+pub fun main(account: Address, id: UInt64): Crave.Series {
 
-    let collectionRef = getAccount(account).getCapability(KOTD.CollectionPublicPath)
-        .borrow<&{KOTD.NiftoryCollectibleCollectionPublic}>()
-        ?? panic("Could not get public KOTD collection reference")
+    let collectionRef = getAccount(account).getCapability(Crave.CollectionPublicPath)
+        .borrow<&{Crave.CraveCollectionPublic}>()
+        ?? panic("Could not get public Crave collection reference")
 
     let token = collectionRef.borrowCollectible(id: id)
         ?? panic("Could not borrow a reference to the specified Collectible")
 
     let data = token.data
 
-    return KOTD.SetData(setID: data.setID).series
+    return Crave.SetData(setID: data.setID).series
 }

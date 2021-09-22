@@ -1,6 +1,6 @@
-import KOTD from "../../contracts/KOTD.cdc"
+import Crave from "../../contracts/Crave.cdc"
 
-// This transaction is how a KOTD admin adds a created Collectible Item to a Set
+// This transaction is how a Crave admin adds a created Collectible Item to a Set
 
 // Parameters:
 //
@@ -9,13 +9,13 @@ import KOTD from "../../contracts/KOTD.cdc"
 
 transaction(setID: UInt32, collectibleItemID: UInt32) {
 
-    // Local variable for the KOTD Admin object
-    let adminRef: &KOTD.Admin
+    // Local variable for the Crave Admin object
+    let adminRef: &Crave.Admin
 
     prepare(acct: AuthAccount) {
 
         // borrow a reference to the Admin resource in storage
-        self.adminRef = acct.borrow<&KOTD.Admin>(from: KOTD.AdminStoragePath)
+        self.adminRef = acct.borrow<&Crave.Admin>(from: Crave.AdminStoragePath)
             ?? panic("Could not borrow a reference to the Admin resource")
     }
 
@@ -30,7 +30,7 @@ transaction(setID: UInt32, collectibleItemID: UInt32) {
 
     post {
 
-        KOTD.getCollectibleItemsInSet(setID: setID)!.contains(collectibleItemID): 
+        Crave.getCollectibleItemsInSet(setID: setID)!.contains(collectibleItemID): 
             "set does not contain collectibleItemID"
     }
 }

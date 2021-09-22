@@ -1,4 +1,4 @@
-import KOTD from "../contracts/KOTD.cdc"
+import Crave from "../contracts/Crave.cdc"
 
 // This script gets the serial number of a Collectible
 // by borrowing a reference to the Collectible 
@@ -14,8 +14,8 @@ import KOTD from "../contracts/KOTD.cdc"
 
 pub fun main(account: Address, id: UInt64): UInt32 {
 
-    let collectionRef = getAccount(account).getCapability(KOTD.CollectionPublicPath)
-        .borrow<&{KOTD.NiftoryCollectibleCollectionPublic}>()
+    let collectionRef = getAccount(account).getCapability(Crave.CollectionPublicPath)
+        .borrow<&{Crave.CraveCollectionPublic}>()
         ?? panic("Could not get public Collectible collection reference")
 
     let token = collectionRef.borrowCollectible(id: id)
