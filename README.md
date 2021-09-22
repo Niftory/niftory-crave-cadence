@@ -70,4 +70,4 @@ Once installed, from the root of the project:
 You're now setup to run any desired commands against testnet.
 
 ## Common commands
-See `flow-cli-emulator.sh` for `flow-cli-testnet.sh` comman commands.
+See `flow-cli-emulator.sh` for `flow-cli-testnet.sh` common commands.
