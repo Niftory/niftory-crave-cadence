@@ -1,4 +1,4 @@
-# niftory-kotd-cadence
+# niftory-crave-cadence
 
 This repo contains the smart contracts, supporting transactions and scripts, and test suite for the KOTD collectible experience, built on Flow.
 
@@ -70,6 +70,4 @@ Once installed, from the root of the project:
 You're now setup to run any desired commands against testnet.
 
 ## Common commands
-| :bulb: Contracts are already deployed to testnet at 0x9f3e19cda04154fc - you'll generally only need to run scripts and transactions. |
-|---------------------------------------------------------------------------------------------------------------|
 See `flow-cli-emulator.sh` for `flow-cli-testnet.sh` comman commands.
